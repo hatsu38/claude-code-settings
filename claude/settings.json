@@ -1,0 +1,44 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh pr view:*)",
+      "Bash(gh repo view:*)",
+      "Bash(gh pr diff:*)",
+    ]
+  },
+  "enabledPlugins": {
+    "context7@claude-plugins-official": true
+  },
+  "language": "Japanese",
+  "terminalProgressBarEnabled": true,
+  "Notification": [
+    {
+      "hooks": [
+        {
+          "type": "command",
+          "command": "afplay /System/Library/Sounds/Glass.aiff"
+        }
+      ]
+    }
+  ],
+  "PostToolUse": [
+    {
+      "hooks": [
+        {
+          "type": "command",
+          "command": "afplay /System/Library/Sounds/Glass.aiff"
+        }
+      ]
+    }
+  ],
+  "Stop": [
+    {
+      "hooks": [
+        {
+          "type": "command",
+          "command": "afplay /System/Library/Sounds/Glass.aiff"
+        }
+      ]
+    }
+  ],
+}
