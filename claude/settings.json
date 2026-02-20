@@ -4,6 +4,17 @@
       "Bash(gh pr view:*)",
       "Bash(gh repo view:*)",
       "Bash(gh pr diff:*)",
+      "Bash(git diff:*)",
+      "Bash(wc:*)",
+      "Bash(echo:*)",
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "WebSearch",
+      "Bash(git diff:*)",
+      "Bash(./bin/rspec:*)",
+      "Skill(commit)",
+      "WebFetch(domain:*)"
     ]
   },
   "enabledPlugins": {
@@ -11,34 +22,26 @@
   },
   "language": "Japanese",
   "terminalProgressBarEnabled": true,
-  "Notification": [
-    {
-      "hooks": [
-        {
-          "type": "command",
-          "command": "afplay /System/Library/Sounds/Glass.aiff"
-        }
-      ]
-    }
-  ],
-  "PostToolUse": [
-    {
-      "hooks": [
-        {
-          "type": "command",
-          "command": "afplay /System/Library/Sounds/Glass.aiff"
-        }
-      ]
-    }
-  ],
-  "Stop": [
-    {
-      "hooks": [
-        {
-          "type": "command",
-          "command": "afplay /System/Library/Sounds/Glass.aiff"
-        }
-      ]
-    }
-  ],
+  "hooks": {
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay /System/Library/Sounds/Glass.aiff"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay /System/Library/Sounds/Glass.aiff"
+          }
+        ]
+      }
+    ]
+  }
 }
