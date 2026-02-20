@@ -43,6 +43,10 @@ claude/
 └── security.md                            #   セキュリティ
 
 .claude.json                               # MCP サーバー設定
+
+scripts/
+├── setup.sh                               # シンボリックリンク作成
+└── uninstall.sh                           # シンボリックリンク削除
 ```
 
 ## セットアップ
@@ -53,31 +57,61 @@ claude/
 - [GitHub CLI (`gh`)](https://cli.github.com/) がインストール・認証済み
 - Node.js（MCP サーバー実行用）
 
-### 導入手順
+### 方法1: シンボリックリンク（推奨）
 
-1. このリポジトリの `claude/` ディレクトリをプロジェクトのルートにコピー
+`~/.claude/` にシンボリックリンクを作成し、全プロジェクトで設定を共有します。`git pull` するだけで最新の設定が反映されます。
 
 ```bash
 # リポジトリをクローン
 git clone https://github.com/hatsu38/claude-code-settings.git
+cd claude-code-settings
 
-# 対象プロジェクトに claude/ をコピー
+# セットアップスクリプトを実行（プレビュー）
+./scripts/setup.sh --dry-run
+
+# 問題なければ実行
+./scripts/setup.sh
+```
+
+**リンクされるもの:**
+
+| リポジトリ内 | リンク先 |
+|---|---|
+| `claude/commands/*.md` | `~/.claude/commands/` |
+| `claude/skills/*/` | `~/.claude/skills/` |
+| `.claude/rules/*.md` | `~/.claude/rules/` |
+| `claude/CLAUDE.md` | `~/.claude/CLAUDE.md` |
+
+既存ファイルがある場合は `.bak` にバックアップされます。`~/.claude/` 内の他のファイル（個人設定、キャッシュ等）は影響を受けません。
+
+**アンインストール:**
+
+```bash
+./scripts/uninstall.sh
+```
+
+このリポジトリへのシンボリックリンクのみを削除し、バックアップがあれば復元します。
+
+### 方法2: 手動コピー
+
+特定のプロジェクトにのみ設定を適用したい場合は、必要なファイルをコピーしてください。
+
+```bash
+git clone https://github.com/hatsu38/claude-code-settings.git
+
+# コマンド・スキルをコピー
 cp -r claude-code-settings/claude/ /path/to/your-project/claude/
-```
 
-2. 必要に応じて `.claude.json` をプロジェクトルートにコピー（MCP サーバーを使う場合）
-
-```bash
-cp claude-code-settings/.claude.json /path/to/your-project/.claude.json
-```
-
-3. `.claude.json` 内の環境変数（`GITHUB_PERSONAL_ACCESS_TOKEN` 等）を自分の値に設定
-
-4. ルールを使う場合は `.claude/rules/` もコピー
-
-```bash
+# ルールをコピー
 cp -r claude-code-settings/.claude/rules/ /path/to/your-project/.claude/rules/
 ```
+
+### settings.json / .claude.json の設定
+
+これらは個人環境に依存するため、手動で設定してください。
+
+- **`~/.claude/settings.json`** - 本リポジトリの `claude/settings.json` を参考に、permissions や hooks をマージ
+- **`~/.claude.json`** - 本リポジトリの `.claude.json` を参考に、MCP サーバーの設定とトークンを追加
 
 ## コマンド一覧
 
