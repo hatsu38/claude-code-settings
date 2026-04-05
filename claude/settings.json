@@ -1,27 +1,65 @@
 {
+  "cleanupPeriodDays": 9999,
+  "env": {
+    "ENABLE_TOOL_SEARCH": "true",
+    "CLAUDE_CODE_ENABLE_TELEMETRY": "1",
+    "OTEL_LOGS_EXPORTER": "otlp",
+    "OTEL_METRICS_EXPORTER": "otlp",
+    "OTEL_EXPORTER_OTLP_PROTOCOL": "grpc",
+    "OTEL_EXPORTER_OTLP_ENDPOINT": "http://localhost:4317"
+  },
   "permissions": {
     "allow": [
-      "Bash(gh pr view:*)",
-      "Bash(gh repo view:*)",
-      "Bash(gh pr diff:*)",
-      "Bash(git diff:*)",
-      "Bash(wc:*)",
-      "Bash(echo:*)",
-      "Bash(find:*)",
-      "Bash(ls:*)",
-      "Bash(cat:*)",
       "WebSearch",
+      "WebFetch(domain:*)",
+      "Bash(git log:*)",
       "Bash(git diff:*)",
-      "Bash(./bin/rspec:*)",
-      "Skill(commit)",
-      "WebFetch(domain:*)"
+      "Bash(git status:*)",
+      "Bash(git show:*)",
+      "Bash(git checkout:*)",
+      "Bash(gh issue list:*)",
+      "Bash(gh issue view:*)",
+      "Bash(gh issue status:*)",
+      "Bash(gh pr list:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr status:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(gh repo view:*)",
+      "Bash(gh repo list:*)",
+      "Bash(gh release list:*)",
+      "Bash(gh release view:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh run view:*)",
+      "Bash(gh workflow list:*)",
+      "Bash(gh workflow view:*)",
+      "Bash(gh search:*)",
+      "Bash(gh gist list:*)",
+      "Bash(gh gist view:*)",
+      "Bash(gh api:*)",
+      "Bash(gh pr create:*)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(mkdir:*)",
+      "Bash(touch:*)",
+      "Bash(which:*)",
+      "Bash(bundle list:*)",
+      "Bash(bundle info:*)",
+      "Bash(ruby -v:*)",
+      "Bash(node -v:*)",
+      "Bash(yarn --version:*)",
+      "Bash(./bin/rspec:*)"
+    ],
+    "deny": [
+      "Bash(git reset:*)",
+      "Bash(git rebase:*)",
+      "Bash(sudo:*)",
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/*credentials*)",
+      "Read(**/*secret*)"
     ]
   },
-  "enabledPlugins": {
-    "context7@claude-plugins-official": true
-  },
-  "language": "Japanese",
-  "terminalProgressBarEnabled": true,
   "hooks": {
     "Notification": [
       {
@@ -42,6 +80,43 @@
           }
         ]
       }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"additionalContext\":\"'$(date)'\"}}'",
+            "timeout": 5
+          }
+        ]
+      }
     ]
-  }
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "input=$(cat); model=$(echo \"$input\" | jq -r '.model.display_name'); cwd=$(echo \"$input\" | jq -r '.workspace.current_dir'); git_branch=\"\"; if git -C \"$cwd\" rev-parse --git-dir > /dev/null 2>&1; then git_branch=$(git -C \"$cwd\" --no-optional-locks branch --show-current 2>/dev/null); if [ -n \"$git_branch\" ]; then git_branch=\" [$git_branch]\"; fi; fi; echo \"$model | $cwd$git_branch\""
+  },
+  "enabledPlugins": {
+    "context7@claude-plugins-official": true,
+    "codex@openai-codex": true
+  },
+  "extraKnownMarketplaces": {
+    "openai-codex": {
+      "source": {
+        "source": "github",
+        "repo": "openai/codex-plugin-cc"
+      }
+    }
+  },
+  "language": "Japanese",
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "medium",
+  "disableAutoMode": "disable",
+  "feedbackSurveyState": {
+    "lastShownTime": 1754203116960
+  },
+  "terminalProgressBarEnabled": true,
+  "defaultMode": "plan"
 }
