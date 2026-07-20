@@ -40,26 +40,12 @@ main() {
   log "対象: $CLAUDE_HOME"
   echo ""
 
-  # Commands
-  log "--- Commands ---"
-  for cmd in "$REPO_DIR/claude/commands/"*.md; do
-    [ -f "$cmd" ] || continue
-    remove_link "$CLAUDE_HOME/commands/$(basename "$cmd")"
-  done
-
   # Skills
   log "--- Skills ---"
   for skill_dir in "$REPO_DIR/claude/skills/"*/; do
     [ -d "$skill_dir" ] || continue
     skill_name="$(basename "$skill_dir")"
     remove_link "$CLAUDE_HOME/skills/$skill_name"
-  done
-
-  # Rules
-  log "--- Rules ---"
-  for rule in "$REPO_DIR/.claude/rules/"*.md; do
-    [ -f "$rule" ] || continue
-    remove_link "$CLAUDE_HOME/rules/$(basename "$rule")"
   done
 
   # CLAUDE.md

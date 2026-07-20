@@ -15,9 +15,7 @@ usage() {
   echo "  --dry-run  実際にリンクを作成せず、実行内容をプレビューします"
   echo ""
   echo "リンク対象:"
-  echo "  claude/commands/*.md     → ~/.claude/commands/"
   echo "  claude/skills/*/         → ~/.claude/skills/"
-  echo "  .claude/rules/*.md       → ~/.claude/rules/"
   echo "  claude/CLAUDE.md         → ~/.claude/CLAUDE.md"
 }
 
@@ -122,18 +120,8 @@ main() {
 
   # ディレクトリ作成
   if [ "$DRY_RUN" = false ]; then
-    mkdir -p "$CLAUDE_HOME/commands"
     mkdir -p "$CLAUDE_HOME/skills"
-    mkdir -p "$CLAUDE_HOME/rules"
   fi
-
-  # Commands
-  log "--- Commands ---"
-  for cmd in "$REPO_DIR/claude/commands/"*.md; do
-    [ -f "$cmd" ] || continue
-    link_file "$cmd" "$CLAUDE_HOME/commands/$(basename "$cmd")"
-  done
-  echo ""
 
   # Skills
   log "--- Skills ---"
@@ -141,14 +129,6 @@ main() {
     [ -d "$skill_dir" ] || continue
     skill_name="$(basename "$skill_dir")"
     link_dir "${skill_dir%/}" "$CLAUDE_HOME/skills/$skill_name"
-  done
-  echo ""
-
-  # Rules
-  log "--- Rules ---"
-  for rule in "$REPO_DIR/.claude/rules/"*.md; do
-    [ -f "$rule" ] || continue
-    link_file "$rule" "$CLAUDE_HOME/rules/$(basename "$rule")"
   done
   echo ""
 
