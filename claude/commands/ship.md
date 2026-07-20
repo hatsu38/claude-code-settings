@@ -43,7 +43,7 @@ PRの説明文を自動生成して更新する：
 - `gh pr view <PR番号> --json title,baseRefName,headRefName` でPR情報を取得
 - `git log <base>..HEAD --oneline` でコミット履歴を取得
 - `git diff <base>...HEAD` で全変更差分を取得
-- PRテンプレート `.github/pull_request_template.md` があれば読み込み、各セクションを埋める
+- PRテンプレート `.github/PULL_REQUEST_TEMPLATE.md` があれば読み込み、各セクションを埋める
 - `gh api` でPRのbodyを更新する
 - 更新したPRのURLを表示する
 
@@ -60,3 +60,4 @@ PRの説明文を自動生成して更新する：
 - `--no-verify` フラグを使用しない
 - pre-commit hookが失敗した場合は、問題を修正してから新しいコミットを作成する
 - main ブランチにいる場合はエラーを出して中断する（直接pushを防ぐ）
+
