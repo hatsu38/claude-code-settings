@@ -9,8 +9,7 @@
 普段使いしている Claude Code のグローバル設定・スラッシュコマンド・スキルをこのリポジトリで管理し、シンボリックリンクで `~/.claude/` に配置します。`git pull` するだけでどのマシンでも同じ設定が使えます。
 
 - **CLAUDE.md** - 全プロジェクト共通の個人設定（言語・Git 運用・モデルの使い分け等）
-- **スラッシュコマンド** - コミット、PR 作成などの定型作業を自動化
-- **スキル** - タスクルーティング、PR レビュー操作、文章規範などの再利用可能な手順書
+- **スキル** - コミット・PR 作成などの定型作業から、タスクルーティング・文章規範まで、再利用可能な手順書（`/名前` で明示起動、または内容に応じて自動起動）
 - **MCP サーバー** - GitHub、Playwright、Sentry 等の外部ツール統合
 
 ## ディレクトリ構成
@@ -19,15 +18,14 @@
 claude/
 ├── CLAUDE.md                              # 全プロジェクト共通の個人設定
 ├── settings.json                          # Claude Code 設定（参考用。手動マージ）
-├── commands/                              # スラッシュコマンド
-│   ├── agmsg.md                           #   /agmsg
-│   ├── commit.md                          #   /commit
-│   └── ship.md                            #   /ship
 └── skills/                                # スキル
+    ├── agmsg/                             #   エージェント間メッセージング
+    ├── commit/                            #   日本語コミットメッセージ生成
     ├── empirical-prompt-tuning/           #   プロンプト・スキルの実証的チューニング
     ├── github-pr-review-operation/        #   GitHub PR操作
     ├── grill-me/                          #   計画・設計の深掘り質問
     ├── japanese-tech-writing/             #   日本語技術文書の文章規範
+    ├── ship/                              #   commit→push→PR作成の一括実行
     ├── task-routing/                      #   モデル・ツールのルーティング
     └── web-perf/                          #   Webパフォーマンス分析
 
@@ -66,7 +64,6 @@ cd claude-code-settings
 
 | リポジトリ内 | リンク先 |
 |---|---|
-| `claude/commands/*.md` | `~/.claude/commands/` |
 | `claude/skills/*/` | `~/.claude/skills/` |
 | `claude/CLAUDE.md` | `~/.claude/CLAUDE.md` |
 
@@ -87,26 +84,19 @@ cd claude-code-settings
 - **`~/.claude/settings.json`** - 本リポジトリの `claude/settings.json` を参考に、permissions や hooks をマージ
 - **`~/.claude.json`** - 本リポジトリの `.claude.json` を参考に、MCP サーバーの設定とトークンを追加
 
-## コマンド一覧
-
-Claude Code 内で `/コマンド名` で実行できるスラッシュコマンドです。
-
-| コマンド | 説明 | 使い方 |
-|---|---|---|
-| `/agmsg` | エージェント間メッセージング（受信確認・送信・履歴表示） | `/agmsg` |
-| `/commit` | 変更内容を分析し、日本語で詳細なコミットメッセージを生成してコミット | `/commit` |
-| `/ship` | commit → push → PR 作成 → PR 説明文の生成までを一括で実行 | `/ship` |
-
 ## スキル一覧
 
-タスクに応じて自動起動、または明示的に呼び出される再利用可能なスキルです。
+`/スキル名` で明示起動、またはタスク内容に応じて自動起動される再利用可能なスキルです。
 
 | スキル | 説明 |
 |---|---|
+| **agmsg** | エージェント間メッセージング（受信確認・送信・履歴表示） |
+| **commit** | 変更内容を分析し、日本語で詳細なコミットメッセージを生成してコミット |
 | **empirical-prompt-tuning** | agent 向けテキスト指示（skill / プロンプト / CLAUDE.md 節）を、バイアスを排した実行者に動かして両面評価し、反復改善する手法 |
 | **github-pr-review-operation** | `gh` CLI を使った PR 操作（情報取得、差分確認、インラインコメント投稿） |
 | **grill-me** | 計画やデザインについて徹底的に質問し、意思決定ツリーの各分岐を解決して共通理解に達する |
 | **japanese-tech-writing** | 日本語の技術文書・書籍原稿の文章規範（整形、パラグラフライティング、論証の厳密さ、冗長の排除） |
+| **ship** | commit → push → PR 作成 → PR 説明文の生成までを一括で実行 |
 | **task-routing** | 実作業を伴うタスクの委譲先ルーティング。探索・計画・実装・レビューを役割ごとに最適なモデル/Codex へ委譲する規範。モデル名は `routing.md`（SSOT）でのみ管理し、新モデル登場時は表の編集だけで乗り換え可能 |
 | **web-perf** | Chrome DevTools MCP による Web パフォーマンス分析（Core Web Vitals 計測、レンダリングブロック・キャッシュ問題の特定） |
 
@@ -130,9 +120,9 @@ Claude Code 内で `/コマンド名` で実行できるスラッシュコマン
 
 `claude/CLAUDE.md` が全プロジェクト共通の個人設定です。言語・Git 運用・モデルの使い分けなどの方針を記述します。
 
-### スキル・コマンドの追加
+### スキルの追加
 
-`claude/skills/{name}/SKILL.md` または `claude/commands/{name}.md` を追加して `./scripts/setup.sh` を再実行すると、`~/.claude/` にリンクされます。
+`claude/skills/{name}/SKILL.md` を追加して `./scripts/setup.sh` を再実行すると、`~/.claude/skills/` にリンクされます。スラッシュコマンドは作らず、すべてスキルとして管理します。
 
 ### MCP サーバーの追加・削除
 

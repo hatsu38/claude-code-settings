@@ -1,4 +1,5 @@
 ---
+name: commit
 allowed-tools: Bash(git add:*), Bash(git status:*), Bash(git commit:*), Bash(git diff:*), Bash(git log:*), Bash(git branch:*), Bash(git switch:*)
 description: 日本語で詳細なコミットメッセージを生成してコミットする
 ---

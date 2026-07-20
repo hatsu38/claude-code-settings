@@ -1,4 +1,5 @@
 ---
+name: agmsg
 description: Agent messaging — check inbox, send messages, view history
 ---
 

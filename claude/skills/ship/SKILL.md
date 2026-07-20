@@ -1,4 +1,5 @@
 ---
+name: ship
 allowed-tools: Bash(git add:*), Bash(git status:*), Bash(git commit:*), Bash(git diff:*), Bash(git log:*), Bash(git push:*), Bash(git branch:*), Bash(gh pr create:*), Bash(gh pr view:*), Bash(gh api:*)
 description: commit → push → PR作成 → PR説明文の生成までを一括で実行する
 ---
