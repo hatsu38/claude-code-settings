@@ -55,13 +55,6 @@ main() {
     remove_link "$CLAUDE_HOME/skills/$skill_name"
   done
 
-  # Rules
-  log "--- Rules ---"
-  for rule in "$REPO_DIR/.claude/rules/"*.md; do
-    [ -f "$rule" ] || continue
-    remove_link "$CLAUDE_HOME/rules/$(basename "$rule")"
-  done
-
   # CLAUDE.md
   log "--- CLAUDE.md ---"
   remove_link "$CLAUDE_HOME/CLAUDE.md"

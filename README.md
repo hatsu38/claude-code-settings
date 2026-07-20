@@ -1,49 +1,37 @@
 # claude-code-settings
 
-Ruby/Rails 開発に特化した [Claude Code](https://docs.anthropic.com/en/docs/claude-code) の設定テンプレート集
+[Claude Code](https://docs.anthropic.com/en/docs/claude-code) の個人設定（`~/.claude/`）を複数マシンで共有するためのリポジトリ
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 ## 概要
 
-Claude Code で Ruby/Rails プロジェクトを効率的に開発するための設定・コマンド・スキル・ルールをまとめたテンプレートリポジトリです。
+普段使いしている Claude Code のグローバル設定・スラッシュコマンド・スキルをこのリポジトリで管理し、シンボリックリンクで `~/.claude/` に配置します。`git pull` するだけでどのマシンでも同じ設定が使えます。
 
-- **スラッシュコマンド** - コミット、PRレビュー、RSpecテスト生成などの定型作業を自動化
-- **スキル** - コマンドから呼び出される再利用可能なロジック
-- **ルール** - コーディング規約、Git運用、テスト要件などの開発ルール
+- **CLAUDE.md** - 全プロジェクト共通の個人設定（言語・Git 運用・モデルの使い分け等）
+- **スラッシュコマンド** - コミット、PR 作成などの定型作業を自動化
+- **スキル** - タスクルーティング、PR レビュー操作、文章規範などの再利用可能な手順書
 - **MCP サーバー** - GitHub、Playwright、Sentry 等の外部ツール統合
 
 ## ディレクトリ構成
 
 ```
 claude/
-├── CLAUDE.md                              # プロジェクト設定ガイド
-├── settings.json                          # Claude Code プロジェクト設定
+├── CLAUDE.md                              # 全プロジェクト共通の個人設定
+├── settings.json                          # Claude Code 設定（参考用。手動マージ）
 ├── commands/                              # スラッシュコマンド
+│   ├── agmsg.md                           #   /agmsg
 │   ├── commit.md                          #   /commit
-│   ├── review-pr.md                       #   /review-pr
-│   ├── review-local.md                    #   /review-local
-│   ├── generate-rspec.md                  #   /generate-rspec
-│   ├── pr-description.md                  #   /pr-description
-│   └── update-readme.md                   #   /update-readme
+│   └── ship.md                            #   /ship
 └── skills/                                # スキル
-    ├── rspec-generator/                   #   RSpecテスト生成
+    ├── empirical-prompt-tuning/           #   プロンプト・スキルの実証的チューニング
     ├── github-pr-review-operation/        #   GitHub PR操作
+    ├── grill-me/                          #   計画・設計の深掘り質問
+    ├── japanese-tech-writing/             #   日本語技術文書の文章規範
     ├── task-routing/                      #   モデル・ツールのルーティング
-    ├── update-claude-md/                  #   CLAUDE.md管理
-    └── update-rules/                      #   ルールファイル管理
+    └── web-perf/                          #   Webパフォーマンス分析
 
-.claude/rules/                             # 開発ルール
-├── coding-style.md                        #   コーディング規約
-├── git-workflow.md                        #   Git運用フロー
-├── testing.md                             #   テスト要件
-├── performance.md                         #   パフォーマンス最適化
-├── patterns.md                            #   共通パターン
-├── hooks.md                               #   Hooks設定
-├── agents.md                              #   エージェント運用
-└── security.md                            #   セキュリティ
-
-.claude.json                               # MCP サーバー設定
+.claude.json                               # MCP サーバー設定（参考用。手動マージ）
 
 scripts/
 ├── setup.sh                               # シンボリックリンク作成
@@ -58,7 +46,7 @@ scripts/
 - [GitHub CLI (`gh`)](https://cli.github.com/) がインストール・認証済み
 - Node.js（MCP サーバー実行用）
 
-### 方法1: シンボリックリンク（推奨）
+### シンボリックリンク（推奨）
 
 `~/.claude/` にシンボリックリンクを作成し、全プロジェクトで設定を共有します。`git pull` するだけで最新の設定が反映されます。
 
@@ -80,10 +68,9 @@ cd claude-code-settings
 |---|---|
 | `claude/commands/*.md` | `~/.claude/commands/` |
 | `claude/skills/*/` | `~/.claude/skills/` |
-| `.claude/rules/*.md` | `~/.claude/rules/` |
 | `claude/CLAUDE.md` | `~/.claude/CLAUDE.md` |
 
-既存ファイルがある場合は `.bak` にバックアップされます。`~/.claude/` 内の他のファイル（個人設定、キャッシュ等）は影響を受けません。
+既存ファイルがある場合は `.bak` にバックアップされます。`~/.claude/` 内の他のファイル（キャッシュ、プロジェクト別メモリ等）は影響を受けません。
 
 **アンインストール:**
 
@@ -92,20 +79,6 @@ cd claude-code-settings
 ```
 
 このリポジトリへのシンボリックリンクのみを削除し、バックアップがあれば復元します。
-
-### 方法2: 手動コピー
-
-特定のプロジェクトにのみ設定を適用したい場合は、必要なファイルをコピーしてください。
-
-```bash
-git clone https://github.com/hatsu38/claude-code-settings.git
-
-# コマンド・スキルをコピー
-cp -r claude-code-settings/claude/ /path/to/your-project/claude/
-
-# ルールをコピー
-cp -r claude-code-settings/.claude/rules/ /path/to/your-project/.claude/rules/
-```
 
 ### settings.json / .claude.json の設定
 
@@ -120,39 +93,22 @@ Claude Code 内で `/コマンド名` で実行できるスラッシュコマン
 
 | コマンド | 説明 | 使い方 |
 |---|---|---|
+| `/agmsg` | エージェント間メッセージング（受信確認・送信・履歴表示） | `/agmsg` |
 | `/commit` | 変更内容を分析し、日本語で詳細なコミットメッセージを生成してコミット | `/commit` |
-| `/review-pr` | GitHub上のPRをマルチエージェントでコードレビュー（バグ検出・品質・セキュリティ） | `/review-pr` or `/review-pr 123` |
-| `/review-local` | PRオープン前にローカル変更をセルフレビュー（バグ・CLAUDE.md準拠・セキュリティ） | `/review-local` |
-| `/generate-rspec` | git diff の差分から変更されたRubyファイルのRSpecテストを自動生成 | `/generate-rspec` or `/generate-rspec main` |
-| `/pr-description` | PRテンプレートに基づきPR Descriptionを自動生成・更新 | `/pr-description` or `/pr-description 123` |
-| `/update-readme` | README.md をリポジトリの実態（コマンド・スキル・ルール・MCP）と同期 | `/update-readme` |
+| `/ship` | commit → push → PR 作成 → PR 説明文の生成までを一括で実行 | `/ship` |
 
 ## スキル一覧
 
-コマンドから内部的に参照される再利用可能なスキルです。
+タスクに応じて自動起動、または明示的に呼び出される再利用可能なスキルです。
 
 | スキル | 説明 |
 |---|---|
-| **rspec-generator** | RSpecテスト生成のコアロジック。18種類のファイルタイプ分類、specパス解決、テストパターン適用 |
-| **github-pr-review-operation** | `gh` CLI を使ったPR操作（情報取得、差分確認、インラインコメント投稿） |
-| **task-routing** | 実作業を伴うタスクの委譲先ルーティング。探索・計画・実装・レビューを役割ごとに最適なモデル/Codexへ委譲する規範。モデル名は `routing.md`（SSOT）でのみ管理し、新モデル登場時は表の編集だけで乗り換え可能 |
-| **update-claude-md** | CLAUDE.md のレビュー・スリム化・同期を行う最適化スキル |
-| **update-rules** | コードベースを分析して `.claude/rules/` のルールファイルを作成・更新 |
-
-## ルール一覧
-
-`.claude/rules/` に格納された開発ルールです。Claude Code がコード生成・レビュー時に自動参照します。
-
-| ルール | 内容 |
-|---|---|
-| **coding-style.md** | 不変性（Immutability）、ファイル構成、エラーハンドリング、入力バリデーション |
-| **git-workflow.md** | Conventional Commits、PR作成フロー、TDDを含む機能実装ワークフロー |
-| **testing.md** | 80%カバレッジ必須、TDD（RED→GREEN→IMPROVE）、ユニット/統合/E2Eテスト |
-| **performance.md** | モデル選択戦略（Haiku/Sonnet/Opus）、コンテキストウィンドウ管理 |
-| **patterns.md** | APIレスポンス形式、Custom Hooks、Repository パターン |
-| **hooks.md** | PreToolUse/PostToolUse/Stop のHook定義、自動フォーマット |
-| **agents.md** | 利用可能エージェント一覧、並列実行、マルチパースペクティブ分析 |
-| **security.md** | シークレット管理、入力バリデーション、セキュリティチェックリスト |
+| **empirical-prompt-tuning** | agent 向けテキスト指示（skill / プロンプト / CLAUDE.md 節）を、バイアスを排した実行者に動かして両面評価し、反復改善する手法 |
+| **github-pr-review-operation** | `gh` CLI を使った PR 操作（情報取得、差分確認、インラインコメント投稿） |
+| **grill-me** | 計画やデザインについて徹底的に質問し、意思決定ツリーの各分岐を解決して共通理解に達する |
+| **japanese-tech-writing** | 日本語の技術文書・書籍原稿の文章規範（整形、パラグラフライティング、論証の厳密さ、冗長の排除） |
+| **task-routing** | 実作業を伴うタスクの委譲先ルーティング。探索・計画・実装・レビューを役割ごとに最適なモデル/Codex へ委譲する規範。モデル名は `routing.md`（SSOT）でのみ管理し、新モデル登場時は表の編集だけで乗り換え可能 |
+| **web-perf** | Chrome DevTools MCP による Web パフォーマンス分析（Core Web Vitals 計測、レンダリングブロック・キャッシュ問題の特定） |
 
 ## MCP サーバー設定
 
@@ -172,22 +128,11 @@ Claude Code 内で `/コマンド名` で実行できるスラッシュコマン
 
 ### CLAUDE.md の編集
 
-`claude/CLAUDE.md` をプロジェクトに合わせて編集してください。基本方針（言語、フレームワーク、テスト方針等）を記述します。
+`claude/CLAUDE.md` が全プロジェクト共通の個人設定です。言語・Git 運用・モデルの使い分けなどの方針を記述します。
 
-### ルールの追加・変更
+### スキル・コマンドの追加
 
-`.claude/rules/` にMarkdownファイルを追加・編集することで、Claude Code の振る舞いをカスタマイズできます。`paths:` フロントマターで対象ファイルパスを限定できます。
-
-```yaml
----
-paths:
-  - "app/models/**/*.rb"
----
-
-# モデル固有のルール
-- バリデーションは必ず追加する
-- ...
-```
+`claude/skills/{name}/SKILL.md` または `claude/commands/{name}.md` を追加して `./scripts/setup.sh` を再実行すると、`~/.claude/` にリンクされます。
 
 ### MCP サーバーの追加・削除
 
