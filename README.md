@@ -29,6 +29,7 @@ claude/
 └── skills/                                # スキル
     ├── rspec-generator/                   #   RSpecテスト生成
     ├── github-pr-review-operation/        #   GitHub PR操作
+    ├── task-routing/                      #   モデル・ツールのルーティング
     ├── update-claude-md/                  #   CLAUDE.md管理
     └── update-rules/                      #   ルールファイル管理
 
@@ -134,6 +135,7 @@ Claude Code 内で `/コマンド名` で実行できるスラッシュコマン
 |---|---|
 | **rspec-generator** | RSpecテスト生成のコアロジック。18種類のファイルタイプ分類、specパス解決、テストパターン適用 |
 | **github-pr-review-operation** | `gh` CLI を使ったPR操作（情報取得、差分確認、インラインコメント投稿） |
+| **task-routing** | 実作業を伴うタスクの委譲先ルーティング。探索・計画・実装・レビューを役割ごとに最適なモデル/Codexへ委譲する規範。モデル名は `routing.md`（SSOT）でのみ管理し、新モデル登場時は表の編集だけで乗り換え可能 |
 | **update-claude-md** | CLAUDE.md のレビュー・スリム化・同期を行う最適化スキル |
 | **update-rules** | コードベースを分析して `.claude/rules/` のルールファイルを作成・更新 |
 
